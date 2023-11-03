@@ -44,11 +44,11 @@ modes, seg = run_boms(x, y, g, 30, h_s, h_r, K=K)
 
 print(f'Overall time: {time.perf_counter() - tic}')
 #%%
-from sklearn.metrics import normalized_mutual_info_score
-
-result = np.array_equal(seg, boms)
-if result:
-	print("BOMS ran successfully!")
-else:
-	print("Unsuccessful - results don't match.")
-	print(f'normalised mutual information between the two seg: {normalized_mutual_info_score(boms, seg)}')
+# from sklearn.metrics import normalized_mutual_info_score
+#
+# result = np.array_equal(seg, boms)
+# if result:
+# 	print("BOMS ran successfully!")
+# else:
+# 	print("Unsuccessful - results don't match.")
+# 	print(f'normalised mutual information between the two seg: {normalized_mutual_info_score(boms, seg)}')
