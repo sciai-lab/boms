@@ -28,6 +28,3 @@ test = ["scikit-learn"]
 
 [project.urls]
 "Homepage" = "https://github.com/ocimakamboj/boms"
-
-[tool.cibuildwheel]
-before-all = "apt install libpng-dev"

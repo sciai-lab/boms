@@ -8,7 +8,7 @@ def read_data(name):
     y = []
     g = []
     boms = []
-    with open('./example_data.csv') as csvfile:
+    with open('./examples/example_data.csv') as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
         line_count = 0
         for row in readCSV:
