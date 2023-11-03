@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "pybind11>=2.11.0", "requests"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "boms"
+version = "1.0.0"
+authors = [
+  { name="Ocima Kamboj", email="ocimakamboj@gmail.com" },
+]
+description = "Cell Segmentation for Spatial Transcriptomics Data using BOMS"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+    "numpy",
+    "mkl",
+    "mkl-service",
+    "scipy",
+]
+
+[project.optional-dependencies]
+test = ["scikit-learn"]
+
+[project.urls]
+"Homepage" = "https://github.com/ocimakamboj/boms"
+
+[tool.cibuildwheel]
+before-all = "apt install libpng-dev"
