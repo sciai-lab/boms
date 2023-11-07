@@ -38,13 +38,15 @@ class get_eigen_include(object):
 
         return str(target_dir) #target_dir.name
 
-cpp_args = ['-std=c++17', '-mavx512f', '-mfma', '-fopenmp', '-O3', '-lpthread']
+if os.name == 'posix':
+    cpp_args = ['-fopenmp', '-O3'] # ,'-std=c++17',  '-lpthread', '-mavx512f', '-mfma'
+else:
+    cpp_args = ['/openmp', '/O2'] # ,'/std:c++latest',  '/arch:AVX512', '-Dblas=openblas', '-Dlapack=openblas'
 
 ext_modules = [
     Pybind11Extension("boms_wrapper",
         ["./boms/boms_wrapper.cpp", "./boms/meanshift.cpp"],
         extra_compile_args = cpp_args,
-        define_macros = [('VERSION_INFO', __version__)],
         include_dirs=[get_eigen_include()],
         depends=["./boms/meanshift.hpp"],
         ),
@@ -52,7 +54,6 @@ ext_modules = [
 
 setup(
     name='boms',
-    version=__version__,
     author='Ocima Kamboj',
     author_email='ocimakamboj@gmail.com',
     description='Cell Segmentation for Spatial Transcriptomics Data using BOMS',

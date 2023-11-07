@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 //#define EIGEN_VECTORIZE
-#define EIGEN_USE_BLAS
-#define EIGEN_USE_LAPACKE
+//#define EIGEN_USE_BLAS
+//#define EIGEN_USE_LAPACKE
 //#define EIGEN_DONT_PARALLELIZE
 //#include <pybind11/pybind11.h> //needed for checking ctrl+c
 //#include <pybind11/eigen.h> //needed for checking ctrl+c
