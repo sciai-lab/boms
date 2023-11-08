@@ -66,5 +66,7 @@ setup(
         "mkl",
         "mkl-service",
         "scipy",
+        "matplotlib", # for visualisation
+        "scikit-learn", # for visualisation
         ]
 )
