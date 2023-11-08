@@ -35,5 +35,5 @@ modes, seg = run_boms(x, y, g, epochs=30, h_s=10, h_r=0.3, K=30)
 
 ### Demo
 
-A demo notebook is available to run on Google Colab - [BOMS Demo](https:https://colab.research.google.com/drive/16YgR92sc3ai9mheYUb8_SCdo9hjc3-xZ?usp=sharing)
+A demo notebook is available to run on Google Colab - [BOMS Demo](https://colab.research.google.com/drive/16YgR92sc3ai9mheYUb8_SCdo9hjc3-xZ?usp=sharing)
 
