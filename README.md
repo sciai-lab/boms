@@ -1,7 +1,5 @@
 ## BOMS : Cell Segmentation method for Spatial Transcriptomics
 
-This repository contains the source code for building the BOMS package.
-
 ![BOMS Overview](images/method_overview.jpg)
 
 BOMS is a tool for cell segmentation in fluorescent in-situ hybridization (FISH) based Spatial Transcriptomics datasets. It takes as input the gene locations and labels. It assumes that a cell body is homogenous in its transcriptional signature and uses the similarity of these neighborhoods to cluster them together as one cell. The method can also incorporate the flows obtained from Cellpose Segmentation on DAPI/Cell Membrane channels to improve its cell segmentation.
