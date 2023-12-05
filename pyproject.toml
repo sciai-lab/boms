@@ -39,3 +39,4 @@ filename = "pyproject.toml"
 
 [[tool.bumpversion.files]]
 filename = "setup.py"
+# bump-my-version bump patch
