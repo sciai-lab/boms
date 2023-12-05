@@ -47,3 +47,7 @@ serialize = [
 ]
 search = "{current_version}"
 replace = "{new_version}"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+filename = "setup.py"
