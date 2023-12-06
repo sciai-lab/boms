@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - master
+      - boms-develop
   release:
     types:
       - published

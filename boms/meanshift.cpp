@@ -19,11 +19,17 @@
 #include <cmath>
 #include <numeric>
 #include <limits>
+#include <csignal>
 #include <Eigen/Dense>
 #include <Eigen/Eigenvalues>
 
 using namespace std;
 using namespace std::chrono;
+
+void sigint_handler(int sig) {
+	cout << "Process terminated " << sig << endl;
+	exit(1);
+}
 
 float* create_dataset(float* arr_s, float* arr_r, int dim_s, int dim_r, int len) {
     float* data = new float[len * (dim_s + dim_r)];
@@ -712,6 +718,8 @@ void knn_smoothing(float* data, int dim_s, int N, int n_genes, int k, float* cou
 }
 
 float* preprocess_data(float* coords, float* genes, int N, int dim_s, int n_genes, int k) {
+    signal(SIGINT, sigint_handler);
+
     float* data = create_dataset(coords, genes, dim_s, 1, N);
 
     int dim_r = 50;
@@ -968,6 +976,8 @@ float* meanshift_spacerange(float* data, int dim_s, int dim_r, int len, int max_
 }
 
 float* meanshift(float* coords, float* genes, int N, int dim_s, int n_genes, int k, int max_iter, float h_s, float h_r, int kernel_s, int kernel_r, int blurring, float* flows, int height, int width, int use_flows, float alpha) {
+    signal(SIGINT, sigint_handler);
+
     auto start = high_resolution_clock::now();
     float* data = preprocess_data(coords, genes, N, dim_s, n_genes, k);
     auto stop = high_resolution_clock::now();
@@ -985,6 +995,8 @@ float* meanshift(float* coords, float* genes, int N, int dim_s, int n_genes, int
 }
 
 float* density_estimate(float* coords, int* seg, int N, float h) {
+    signal(SIGINT, sigint_handler);
+
     float* density = new float[N]();
 
     kdt_node* arr_node = new kdt_node[N]; //array that stores tree nodes
