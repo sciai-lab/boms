@@ -22,9 +22,11 @@
 #include <csignal>
 #include <Eigen/Dense>
 #include <Eigen/Eigenvalues>
+#include "indicators.hpp"
 
 using namespace std;
 using namespace std::chrono;
+using namespace indicators;
 
 void sigint_handler(int sig) {
 	cout << "Process terminated " << sig << endl;
@@ -892,7 +894,7 @@ void ms_spacerange_iter(kdt_node* root, float* query_data, int dim_s, int dim_r,
     return;
 }
 
-float* meanshift_spacerange(float* data, int dim_s, int dim_r, int len, int max_iter, float h_s, float h_r, int kernel_s, int kernel_r, int blurring, float* flows, int height, int width, int use_flows, float alpha) {
+float* meanshift_spacerange(float* data, int dim_s, int dim_r, int len, int max_iter, float h_s, float h_r, int kernel_s, int kernel_r, int blurring, float* flows, int height, int width, int use_flows, float alpha, ProgressBar &bar, int verbose) {
     kdt_node* arr_node = new kdt_node[len]; //array that stores tree nodes
     float* norm_r = new float[len]; //array that stores norm of tree nodes
     float* norm_qr = new float[len]; //array that stores norm of query nodes
@@ -918,10 +920,15 @@ float* meanshift_spacerange(float* data, int dim_s, int dim_r, int len, int max_
     get_sample_id(len_unique, sample_id);
     kdt_node* root = build_kdtree(unique_query_data, dim_s, dim_r, norm_r, sample_id, unique_counts, len_unique, arr_node);
 
+    if (verbose == 1){
+        bar.set_option(option::PostfixText{to_string(0) + "/" + to_string(max_iter)});
+        bar.set_progress((0));
+    }
+
     for (int iter = 0; iter < max_iter; ++iter) {
         //if (PyErr_CheckSignals() != 0) //needed for checking ctrl+c
         //    throw py::error_already_set(); //needed for checking ctrl+c
-        auto start = high_resolution_clock::now();
+//        auto start = high_resolution_clock::now();
         for (int i = 0; i < len_unique; ++i) {
             for (int j = 0; j < dim_s;++j) {
                 min_s_range[dim_s * i + j] = unique_query_data[(dim_s + dim_r) * i + j] - h_s;
@@ -954,9 +961,13 @@ float* meanshift_spacerange(float* data, int dim_s, int dim_r, int len, int max_
         if (iter == max_iter - 1) {
             copy(query_data, query_data + (dim_s + dim_r) * len, modes);
         }
-        auto stop = high_resolution_clock::now();
-        auto duration = duration_cast<microseconds>(stop - start);
-        cout << "iter - " << iter << " completed, time taken - " << duration.count() / 1e6 << " seconds" << endl;
+//        auto stop = high_resolution_clock::now();
+//        auto duration = duration_cast<microseconds>(stop - start);
+//        cout << "iter - " << iter << " completed, time taken - " << duration.count() / 1e6 << " seconds" << endl;
+        if (verbose == 1){
+            bar.set_option(option::PostfixText{to_string(iter + 1) + "/" + to_string(max_iter)});
+            bar.set_progress((iter + 1));
+        }
     }
 
     delete[] arr_node;
@@ -975,22 +986,47 @@ float* meanshift_spacerange(float* data, int dim_s, int dim_r, int len, int max_
     return modes;
 }
 
-float* meanshift(float* coords, float* genes, int N, int dim_s, int n_genes, int k, int max_iter, float h_s, float h_r, int kernel_s, int kernel_r, int blurring, float* flows, int height, int width, int use_flows, float alpha) {
+float* meanshift(float* coords, float* genes, int N, int dim_s, int n_genes, int k, int max_iter, float h_s, float h_r, int kernel_s, int kernel_r, int blurring, float* flows, int height, int width, int use_flows, float alpha, int verbose) {
     signal(SIGINT, sigint_handler);
 
-    auto start = high_resolution_clock::now();
+    ProgressBar bar{
+      option::BarWidth{50},
+      option::Start{"["},
+      option::Fill{"="},
+      option::Lead{">"},
+      option::Remainder{" "},
+      option::End{"]"},
+      option::PostfixText{"Starting BOMS"},
+      option::ShowElapsedTime{true},
+      option::ForegroundColor{Color::green},
+      option::FontStyles{std::vector<FontStyle>{FontStyle::bold}},
+      option::MaxProgress{max_iter + 1}
+    };
+
+    if (verbose == 1){
+        bar.set_option(option::PostfixText{"Preprocessing Data ... "});
+        bar.set_progress((0));
+    }
+
+//    auto start = high_resolution_clock::now();
     float* data = preprocess_data(coords, genes, N, dim_s, n_genes, k);
-    auto stop = high_resolution_clock::now();
-    auto duration = duration_cast<microseconds>(stop - start);
-    cout << "Preprocessing done: " << duration.count() / 1e6 << " seconds" << endl;
+//    auto stop = high_resolution_clock::now();
+//    auto duration = duration_cast<microseconds>(stop - start);
+//    cout << "Preprocessing done: " << duration.count() / 1e6 << " seconds" << endl;
 
     int dim_r = 50;
     if (n_genes < 50) {
         dim_r = n_genes;
     }
 
-    float* modes = meanshift_spacerange(data, dim_s, dim_r, N, max_iter, h_s, h_r, kernel_s, kernel_r, blurring, flows, height, width, use_flows, alpha);
-    modes = meanshift_spacerange(modes, dim_s, dim_r, N, 1, h_s / 4, 4, 0, 0, 1, flows, 1, 1, 0, 1);
+    float* modes = meanshift_spacerange(data, dim_s, dim_r, N, max_iter, h_s, h_r, kernel_s, kernel_r, blurring, flows, height, width, use_flows, alpha, bar, verbose);
+    if (verbose == 1){
+        bar.set_option(option::PostfixText{"Collapsing modes ... "});
+    }
+    modes = meanshift_spacerange(modes, dim_s, dim_r, N, 1, h_s / 4, 4, 0, 0, 1, flows, 1, 1, 0, 1, bar, 0);
+    if (verbose == 1){
+        bar.set_progress((max_iter + 1));
+    }
     return modes;
 }
 

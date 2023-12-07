@@ -48,7 +48,7 @@ ext_modules = [
         ["./boms/boms_wrapper.cpp", "./boms/meanshift.cpp"],
         extra_compile_args = cpp_args,
         include_dirs=[get_eigen_include()],
-        depends=["./boms/meanshift.hpp"],
+        depends=["./boms/meanshift.hpp", "./boms/indicators.hpp"],
         ),
 ]
 

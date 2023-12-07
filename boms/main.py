@@ -7,7 +7,7 @@ import boms_wrapper as meanshift_cpp
 # import sys
 # sys.path.append('./boms/')
 
-def run_boms(x, y, genes, epochs: int, h_s: float, h_r: float, z = None, K: int = 30, use_flows: bool = None, flows = None, alpha: float = 1):
+def run_boms(x, y, genes, epochs: int, h_s: float, h_r: float, z = None, K: int = 30, use_flows: bool = None, flows = None, alpha: float = 1, verbose: bool = False):
     tic = time.perf_counter()
     # meanshift_cpp = cppimport.imp("meanshift_wrapper")
     # print("done importing")
@@ -28,16 +28,17 @@ def run_boms(x, y, genes, epochs: int, h_s: float, h_r: float, z = None, K: int 
         if alpha < 0.2:
             max_val = np.max(np.abs(flows))
             flows = flows / max_val
-    modes = meanshift_cpp.meanshift_cpp(coords.astype('float32'), genes.astype('float32'), len(np.unique(genes)), K, epochs, h_s, h_r, use_flows, flows, alpha)
+    modes = meanshift_cpp.meanshift_cpp(coords.astype('float32'), genes.astype('float32'), len(np.unique(genes)), K, epochs, h_s, h_r, use_flows, flows, alpha, int(verbose))
     modes = np.reshape(modes, (len(x), -1))
-    print(f'time taken for Meanshift: {time.perf_counter() - tic}')
+    # print(f'time taken for Meanshift: {time.perf_counter() - tic}')
 
     tic = time.perf_counter()
     modes_unique, modes_unique_inv = np.unique(np.round(modes[:, 0:2], 0), axis=0, return_inverse=True)
 
     heir_clus = fclusterdata(modes_unique[:, 0:2], h_s / 2 / 4, criterion="distance")
     seg = heir_clus[modes_unique_inv]
-    print(f'time taken for mode collapsing: {time.perf_counter() - tic}')
+    if verbose:
+        print(f'Mode collapsing completed: {time.perf_counter() - tic:.2f} seconds')
     return modes, seg
 
 def smooth_ge(x, y, genes, K = 30):

@@ -40,7 +40,7 @@ h_s = 17.5
 h_r = 0.4
 K = 30
 
-modes, seg = run_boms(x, y, g, 30, h_s, h_r, K=K)
+modes, seg = run_boms(x, y, g, 30, h_s, h_r, K=K, verbose=True)
 
 print(f'Overall time: {time.perf_counter() - tic}')
 #%%
