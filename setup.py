@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 from setuptools import setup
@@ -38,10 +39,16 @@ class get_eigen_include(object):
 
         return str(target_dir) #target_dir.name
 
-if os.name == 'posix':
-    cpp_args = ['-Xclang', '-fopenmp', '-O3'] # ,'-std=c++17',  '-lpthread', '-mavx512f', '-mfma'
+if sys.platform.startswith('linux'):
+    cpp_args = ['-fopenmp', '-O3']
+elif sys.platform.startswith('macOS'):
+    cpp_args = ['-Xclang', '-fopenmp', '-O3']
 else:
-    cpp_args = ['/openmp', '/O2'] # ,'/std:c++latest',  '/arch:AVX512', '-Dblas=openblas', '-Dlapack=openblas'
+    cpp_args = ['/openmp', '/O2']
+# if os.name == 'posix':
+#     cpp_args = ['-Xclang', '-fopenmp', '-O3'] # ,'-std=c++17',  '-lpthread', '-mavx512f', '-mfma'
+# else:
+#     cpp_args = ['/openmp', '/O2'] # ,'/std:c++latest',  '/arch:AVX512', '-Dblas=openblas', '-Dlapack=openblas'
 
 ext_modules = [
     Pybind11Extension("boms_wrapper",
