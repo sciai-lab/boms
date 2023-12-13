@@ -29,7 +29,7 @@ dependencies = [
 test = ["scikit-learn"]
 
 [tool.cibuildwheel.macos]
-before-all = "brew install libomp"
+before-all = "brew reinstall libomp"
 environment = "LDFLAGS='$(brew --repository)/opt/libomp/lib -lomp'"
 
 [project.urls]
