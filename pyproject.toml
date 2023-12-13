@@ -30,7 +30,7 @@ test = ["scikit-learn"]
 
 [tool.cibuildwheel.macos]
 before-all = "brew install libomp"
-environment = "LDFLAGS='-lomp'"
+environment = "LDFLAGS='$(brew --repository)/opt/libomp/lib -lomp'"
 
 [project.urls]
 "Homepage" = "https://github.com/ocimakamboj/boms"
