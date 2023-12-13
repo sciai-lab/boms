@@ -39,7 +39,7 @@ class get_eigen_include(object):
         return str(target_dir) #target_dir.name
 
 if os.name == 'posix':
-    cpp_args = ['-fopenmp', '-O3'] # ,'-std=c++17',  '-lpthread', '-mavx512f', '-mfma'
+    cpp_args = ['-Xclang', '-fopenmp', '-O3'] # ,'-std=c++17',  '-lpthread', '-mavx512f', '-mfma'
 else:
     cpp_args = ['/openmp', '/O2'] # ,'/std:c++latest',  '/arch:AVX512', '-Dblas=openblas', '-Dlapack=openblas'
 
