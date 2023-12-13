@@ -28,6 +28,9 @@ dependencies = [
 [project.optional-dependencies]
 test = ["scikit-learn"]
 
+[tool.cibuildwheel.macos]
+environment = "LDFLAGS='-lomp'"
+
 [project.urls]
 "Homepage" = "https://github.com/ocimakamboj/boms"
 
