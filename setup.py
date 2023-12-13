@@ -41,7 +41,7 @@ class get_eigen_include(object):
 
 if sys.platform.startswith('linux'):
     cpp_args = ['-fopenmp', '-O3']
-elif sys.platform.startswith('macOS'):
+elif sys.platform.startswith('darwin'):
     cpp_args = ['-Xclang', '-fopenmp', '-O3']
 else:
     cpp_args = ['/openmp', '/O2']
