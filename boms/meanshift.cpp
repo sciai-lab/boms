@@ -787,6 +787,9 @@ void ms_spacerange_iter(kdt_node* root, float* query_data, int dim_s, int dim_r,
 
     action = 0;
 
+//    double* sum_num = new double[dim_s + dim_r](); //uncomment for double precision
+//    double sum_den = 0; //uncomment for double precision
+
 
     //Take an action, which defines your next action
     while (c_node) {
@@ -838,9 +841,11 @@ void ms_spacerange_iter(kdt_node* root, float* query_data, int dim_s, int dim_r,
                     w = w_s * w_r;
 
                     for (int j = 0; j < (dim_s + dim_r); ++j) {
-                        modes[sample_coord + j] += w * c_node->data_count[0] * c_node->data[j];
+                        modes[sample_coord + j] += w * c_node->data_count[0] * c_node->data[j]; //comment for double precision
+//                        sum_num[j] += w * c_node->data_count[0] * c_node->data[j];  //uncomment for double precision
                     }
-                    weight_sum[n] += w * c_node->data_count[0];
+                    weight_sum[n] += w * c_node->data_count[0]; //comment for double precision
+//                    sum_den += w * c_node->data_count[0]; //uncomment for double precision
                 }
             }
 
@@ -876,8 +881,11 @@ void ms_spacerange_iter(kdt_node* root, float* query_data, int dim_s, int dim_r,
     }
 
     for (int j = 0; j < (dim_s + dim_r);++j) {
-        modes[sample_coord + j] = modes[sample_coord + j] / weight_sum[n];
+        modes[sample_coord + j] = modes[sample_coord + j] / weight_sum[n]; //comment for double precision
+//        modes[sample_coord + j] = static_cast<float>(sum_num[j] / sum_den); //uncomment for double precision
     }
+//    weight_sum[n] = static_cast<float>(sum_den); //uncomment for double precision
+//    delete[] sum_num; //uncomment for double precision
 
     if (use_flows == 1) {
         xval = (int)query_data[sample_coord + 0];
@@ -986,7 +994,7 @@ float* meanshift_spacerange(float* data, int dim_s, int dim_r, int len, int max_
     return modes;
 }
 
-float* meanshift(float* coords, float* genes, int N, int dim_s, int n_genes, int k, int max_iter, float h_s, float h_r, int kernel_s, int kernel_r, int blurring, float* flows, int height, int width, int use_flows, float alpha, int verbose) {
+float* meanshift(float* coords, float* genes, int &N, int dim_s, int n_genes, int k, int max_iter, float h_s, float h_r, int kernel_s, int kernel_r, int blurring, float* flows, int height, int width, int use_flows, float alpha, int verbose, float xmin, float xmax, float ymin, float ymax) {
     signal(SIGINT, sigint_handler);
 
     ProgressBar bar{
@@ -1018,6 +1026,19 @@ float* meanshift(float* coords, float* genes, int N, int dim_s, int n_genes, int
     if (n_genes < 50) {
         dim_r = n_genes;
     }
+
+    int N_new = 0;
+    for (int i = 0; i < N;++i) {
+        if (coords[dim_s * i] >= xmin && coords[dim_s * i] <= xmax && coords[dim_s * i + 1] >= ymin && coords[dim_s * i + 1] <= ymax) {
+            for (int j = 0; j < dim_s + dim_r;++j) {
+                if (N_new != i) {
+                    data[N_new * (dim_s + dim_r) + j] = data[i * (dim_s + dim_r) + j];
+                }
+            }
+            N_new += 1;
+        }
+    }
+    N = N_new;
 
     float* modes = meanshift_spacerange(data, dim_s, dim_r, N, max_iter, h_s, h_r, kernel_s, kernel_r, blurring, flows, height, width, use_flows, alpha, bar, verbose);
     if (verbose == 1){
