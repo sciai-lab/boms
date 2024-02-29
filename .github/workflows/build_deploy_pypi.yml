@@ -25,7 +25,7 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.2
         with:
-          only: "cp3*"
+          only: cp3*
         # env:
         #   CIBW_SOME_OPTION: value
         #    ...
