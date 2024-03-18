@@ -5,7 +5,7 @@ from pathlib import Path
 from setuptools import setup
 from pybind11.setup_helpers import Pybind11Extension, build_ext
 
-__version__ = "1.0.5"
+__version__ = "1.1.0"
 
 SETUP_DIRECTORY = Path(__file__).resolve().parent
 class get_eigen_include(object):
