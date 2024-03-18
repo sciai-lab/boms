@@ -48,3 +48,20 @@ if result:
 else:
 	print("Unsuccessful - results don't match.")
 	print(f'normalised mutual information between the two seg: {normalized_mutual_info_score(boms, seg)}')
+#%%
+from boms.utils_vis import plot_fish_with_labels
+from boms import seg_for_polygons
+
+fov = [[3744, 4494], [2256, 3006]]
+invert_yaxis = True
+invert_xaxis = True
+s_units = 1
+f_lw = 0.5
+seg_in = seg_for_polygons(coords[:, 0], coords[:, 1], seg, h_s)
+fig = plot_fish_with_labels(seg, coords[:, 0], coords[:, 1], seg=seg_in, filter_bg=True, fov = fov, invert_xaxis=invert_xaxis, invert_yaxis=invert_yaxis, s_units=s_units, f_lw=f_lw)
+fig.show()
+#%%
+seg_in = seg_for_polygons(coords2[:, 0], coords2[:, 1], seg2, h_s)
+fig = plot_fish_with_labels(seg2, coords2[:, 0], coords2[:, 1], seg=seg_in, filter_bg=True, fov = fov, invert_xaxis=invert_xaxis, invert_yaxis=invert_yaxis, s_units=s_units, f_lw=f_lw)
+fig.show()
+
