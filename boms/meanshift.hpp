@@ -1,4 +1,4 @@
-float* meanshift(float* coords, float* genes, int N, int dim_s, int n_genes, int k, int max_iter, float h_s, float h_r, int kernel_s, int kernel_r, int blurring, float* flows, int height, int width, int use_flows, float alpha);
+float* meanshift(float* coords, float* genes, int &N, int dim_s, int n_genes, int k, int max_iter, float h_s, float h_r, int kernel_s, int kernel_r, int blurring, float* flows, int height, int width, int use_flows, float alpha, int verbose, float xmin, float xmax, float ymin, float ymax);
 
 float* preprocess_data(float* coords, float* genes, int N, int dim_s, int n_genes, int k);
 

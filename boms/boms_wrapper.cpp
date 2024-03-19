@@ -58,7 +58,7 @@ py::array convert_to_py(float* data, int N, int dim) {
     return result;
 }
 
-py::array meanshift_cpp(py::array coords_np, py::array genes_np, int n_genes, int k, int max_iter, float h_s, float h_r, int use_flows, py::array flows_np, float alpha) {
+py::array meanshift_cpp(py::array coords_np, py::array genes_np, int n_genes, int k, int max_iter, float h_s, float h_r, int use_flows, py::array flows_np, float alpha, int verbose, float xmin, float xmax, float ymin, float ymax) {
     float* coords;
     float* genes;
     int N, dim_s, dim_r;
@@ -76,7 +76,7 @@ py::array meanshift_cpp(py::array coords_np, py::array genes_np, int n_genes, in
     }
 
     //float* meanshift(float* coords, float* genes, int N, int dim_s, int n_genes, int k, int max_iter, float h_s, float h_r, int kernel_s, int kernel_r, int blurring);
-    float* modes = meanshift(coords, genes, N, dim_s, n_genes, k, max_iter, h_s, h_r, 1, 0, 1, flows, height, width, use_flows, alpha);
+    float* modes = meanshift(coords, genes, N, dim_s, n_genes, k, max_iter, h_s, h_r, 1, 0, 1, flows, height, width, use_flows, alpha, verbose, xmin, xmax, ymin, ymax);
 
     py::array result = convert_to_py(modes, N, dim_s + dim_r);
 

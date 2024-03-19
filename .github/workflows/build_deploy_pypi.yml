@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - master
+      - boms-develop
   release:
     types:
       - published
@@ -22,7 +23,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.16.2
+        uses: pypa/cibuildwheel@v2.16.5
         # env:
         #   CIBW_SOME_OPTION: value
         #    ...
