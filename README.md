@@ -34,7 +34,7 @@ from boms import run_boms
                 In case no fov is specified, this is the same as the input x and y.
 """
 
-modes, seg = run_boms(x, y, g, epochs=30, h_s=10, h_r=0.3, K=30)
+modes, seg, count_mat, cell_loc, coords = run_boms(x, y, g, epochs=30, h_s=10, h_r=0.3, K=30)
 ```
 
 ### Demo
