@@ -64,4 +64,3 @@ fig.show()
 seg_in = seg_for_polygons(coords2[:, 0], coords2[:, 1], seg2, h_s)
 fig = plot_fish_with_labels(seg2, coords2[:, 0], coords2[:, 1], seg=seg_in, filter_bg=True, fov = fov, invert_xaxis=invert_xaxis, invert_yaxis=invert_yaxis, s_units=s_units, f_lw=f_lw)
 fig.show()
-
