@@ -28,6 +28,10 @@ from boms import run_boms
 
 :return modes: N x (2 + no. of genes) array containing the final modes.
 :return seg: N x 1 array containing the final segmentation.
+:return count_mat: (no. of cells) x (no. of genes) array containing the gene expression counts for each cell.
+:return cell_loc: (no. of cells) x 2 array containing the locations of the cells.
+:return coords: N x 2 array containing the locations of the mRNA spots for which the modes have been calculated. 
+                In case no fov is specified, this is the same as the input x and y.
 """
 
 modes, seg = run_boms(x, y, g, epochs=30, h_s=10, h_r=0.3, K=30)
