@@ -39,5 +39,5 @@ modes, seg, count_mat, cell_loc, coords = run_boms(x, y, g, epochs=30, h_s=10, h
 
 ### Demo
 
-A demo notebook is available to run on Google Colab - [BOMS Demo](https://colab.research.google.com/drive/16YgR92sc3ai9mheYUb8_SCdo9hjc3-xZ?usp=sharing)
+A demo notebook is available to run on Google Colab - [BOMS Demo](https://colab.research.google.com/drive/16YgR92sc3ai9mheYUb8_SCdo9hjc3-xZ?usp=sharing
 
